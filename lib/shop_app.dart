@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop_app/core/routing/app_router.dart';
 import 'package:shop_app/core/routing/routes.dart';
+import 'package:shop_app/core/theming/theme_light.dart';
 
 class ShopApp extends StatelessWidget {
   final AppRouter appRouter;
@@ -8,13 +10,16 @@ class ShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shop app',
-      theme: ThemeData(
-          primaryColor: Colors.blue, scaffoldBackgroundColor: Colors.white),
-      debugShowCheckedModeBanner: false,
-      initialRoute: Routes.loginScreen,
-      onGenerateRoute: appRouter.generateRoute,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      child: MaterialApp(
+        title: 'Shop app',
+        theme: themeDataLight(),
+        debugShowCheckedModeBanner: false,
+        initialRoute: Routes.loginScreen,
+        onGenerateRoute: appRouter.generateRoute,
+      ),
     );
   }
 }
