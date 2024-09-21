@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/core/di/dependency_injection.dart';
+import 'package:shop_app/features/layout/ui/layout_screen.dart';
+import 'package:shop_app/features/login/logic/login_cubit.dart';
 import 'package:shop_app/features/login/ui/login_screen.dart';
 import 'package:shop_app/features/sign_up/ui/sign_up_screen.dart';
 
@@ -12,11 +16,18 @@ class AppRouter {
     switch (settings.name) {
       case Routes.loginScreen:
         return MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<LoginCubit>(),
+            child: const LoginScreen(),
+          ),
         );
       case Routes.signUpScreen:
         return MaterialPageRoute(
           builder: (_) => const SignUpScreen(),
+        );
+      case Routes.layoutScreen:
+        return MaterialPageRoute(
+          builder: (_) => const LayoutScreen(),
         );
 
       default:

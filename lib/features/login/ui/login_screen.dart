@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop_app/core/theming/app_colors.dart';
 import 'package:shop_app/core/widgets/app_text_button.dart';
+import 'package:shop_app/features/login/logic/login_cubit.dart';
 import 'package:shop_app/features/login/ui/widgets/dont_have_account_text.dart';
 import 'package:shop_app/features/login/ui/widgets/email_and_password_form.dart';
+import 'package:shop_app/features/login/ui/widgets/login_bloc_listener.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -45,13 +48,22 @@ class LoginScreen extends StatelessWidget {
                         .textTheme
                         .titleMedium!
                         .copyWith(color: AppColors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (context
+                          .read<LoginCubit>()
+                          .formKey
+                          .currentState!
+                          .validate()) {
+                        context.read<LoginCubit>().emitLogin();
+                      }
+                    },
                   ),
                 ),
                 SizedBox(
                   height: 25.h,
                 ),
                 const DontHaveAccountText(),
+                const LoginBlocListener(),
               ],
             ),
           ),
