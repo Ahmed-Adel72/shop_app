@@ -19,7 +19,6 @@ class LoginRepo {
           ApiErrorModel(message: respons.message),
         );
       }
-
       return ApiResults.success(respons);
     } catch (error) {
       return ApiResults.failure(ApiErrorHandler.handle(error));

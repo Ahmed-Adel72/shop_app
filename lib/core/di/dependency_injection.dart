@@ -8,10 +8,12 @@ import 'package:shop_app/features/login/logic/login_cubit.dart';
 final getIt = GetIt.instance;
 
 Future<void> setUpGetIt() async {
-  Dio dio = DioFactory.getDio();
 
+  // Dio & Api service
+  Dio dio = DioFactory.getDio();
   getIt.registerLazySingleton<LoginApiService>(() => LoginApiService(dio));
 
+  // login
   getIt.registerLazySingleton<LoginRepo>(() => LoginRepo(getIt()));
   getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt()));
 }
