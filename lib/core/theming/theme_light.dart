@@ -15,4 +15,7 @@ ThemeData themeDataLight() => ThemeData(
         // font size is 14
         titleSmall: GoogleFonts.poppins(color: AppColors.grey),
       ),
+      iconButtonTheme: IconButtonThemeData(
+          style:
+              ButtonStyle(iconColor: WidgetStatePropertyAll(AppColors.grey))),
     );

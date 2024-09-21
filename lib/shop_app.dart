@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop_app/core/routing/app_router.dart';
 import 'package:shop_app/core/routing/routes.dart';
 import 'package:shop_app/core/theming/theme_light.dart';
+import 'package:shop_app/main.dart';
 
 class ShopApp extends StatelessWidget {
   final AppRouter appRouter;
@@ -17,7 +18,7 @@ class ShopApp extends StatelessWidget {
         title: 'Shop app',
         theme: themeDataLight(),
         debugShowCheckedModeBanner: false,
-        initialRoute: Routes.loginScreen,
+        initialRoute: initialRoute,
         onGenerateRoute: appRouter.generateRoute,
       ),
     );

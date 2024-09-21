@@ -16,3 +16,5 @@ class LoginErrorState extends LoginState {
   final ApiErrorModel apiErrorModel;
   LoginErrorState(this.apiErrorModel);
 }
+
+class ChangePasswordVisibilityState extends LoginState {}
