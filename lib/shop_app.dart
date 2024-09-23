@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop_app/core/routing/app_router.dart';
-import 'package:shop_app/core/routing/routes.dart';
 import 'package:shop_app/core/theming/theme_light.dart';
 import 'package:shop_app/main.dart';
 

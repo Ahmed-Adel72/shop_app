@@ -4,6 +4,7 @@ import 'package:shop_app/core/di/dependency_injection.dart';
 import 'package:shop_app/features/layout/ui/layout_screen.dart';
 import 'package:shop_app/features/login/logic/login_cubit.dart';
 import 'package:shop_app/features/login/ui/login_screen.dart';
+import 'package:shop_app/features/sign_up/logic/sign_up_cubit.dart';
 import 'package:shop_app/features/sign_up/ui/sign_up_screen.dart';
 
 import 'routes.dart';
@@ -23,7 +24,10 @@ class AppRouter {
         );
       case Routes.signUpScreen:
         return MaterialPageRoute(
-          builder: (_) => const SignUpScreen(),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<SignUpCubit>(),
+            child: const SignUpScreen(),
+          ),
         );
       case Routes.layoutScreen:
         return MaterialPageRoute(

@@ -3,26 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/core/helpers/extensions.dart';
 import 'package:shop_app/core/routing/routes.dart';
 import 'package:shop_app/core/theming/app_colors.dart';
-import 'package:shop_app/features/login/logic/login_cubit.dart';
-import 'package:shop_app/features/login/logic/login_states.dart';
+import 'package:shop_app/features/sign_up/logic/sign_up_cubit.dart';
+import 'package:shop_app/features/sign_up/logic/sign_up_states.dart';
 
-class LoginBlocListener extends StatelessWidget {
-  const LoginBlocListener({super.key});
+class SignUpBlocListener extends StatelessWidget {
+  const SignUpBlocListener({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<SignUpCubit, SignUpStates>(
       listenWhen: (previous, current) =>
-          current is LoginLoadingState ||
-          current is LoginSuccessState ||
-          current is LoginErrorState,
+          current is SignUpLoadingState ||
+          current is SignUpSuccessState ||
+          current is SignUpErrorState,
       listener: (context, state) {
         switch (state) {
-          case LoginLoadingState _:
+          case SignUpLoadingState _:
             return setupLoadingState(context);
-          case LoginSuccessState _:
+          case SignUpSuccessState _:
             return setupSuccessState(context);
-          case LoginErrorState _:
+          case SignUpErrorState _:
             return setupErrorState(context, state.apiErrorModel.message!);
           default:
             return setupDefaultState(context);
