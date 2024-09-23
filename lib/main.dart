@@ -20,7 +20,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
 
   token = CacheHelper.getData(key: 'token') ?? '';
-  if (token.isNotEmpty && token != null) {
+  if (token.isNotEmpty) {
     initialRoute = Routes.layoutScreen;
   } else {
     initialRoute = Routes.loginScreen;
