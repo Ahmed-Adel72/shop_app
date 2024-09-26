@@ -7,6 +7,10 @@ ThemeData themeDataLight() => ThemeData(
         backgroundColor: AppColors.white,
       ),
       scaffoldBackgroundColor: AppColors.white,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedItemColor: AppColors.primaryColor,
+        unselectedItemColor: AppColors.grey,
+      ),
       textTheme: TextTheme(
         // font size is 48
         displaySmall: GoogleFonts.poppins(color: AppColors.primaryColor),
