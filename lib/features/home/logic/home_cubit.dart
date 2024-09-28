@@ -33,5 +33,6 @@ class HomeCubit extends Cubit<HomeState> {
     } else if (response is Failure<AddFavoriteResponseBody>) {
       print(response.apiErrorModel.message);
     }
+    return response;
   }
 }
