@@ -28,9 +28,17 @@ class _CardOfProductState extends State<CardOfProduct> {
           productId: productId,
         );
     if (response is Success<AddFavoriteResponseBody>) {
-      print("add favvvvvvvvvvvv");
     } else if (response is Failure<AddFavoriteResponseBody>) {
-      print(response.apiErrorModel.message);
+      setState(() {
+        favorites[productId] = !favorites[productId]!;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              "Failed to update favorite: ${response.apiErrorModel.message}"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
