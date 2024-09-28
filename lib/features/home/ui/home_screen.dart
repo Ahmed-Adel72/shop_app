@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shop_app/core/theming/app_colors.dart';
-import 'package:shop_app/features/home/ui/widgets/card_of_product.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/features/home/logic/home_cubit.dart';
+import 'package:shop_app/features/home/logic/home_state.dart';
+import 'package:shop_app/features/home/ui/widgets/setup_loading_home.dart';
+import 'package:shop_app/features/home/ui/widgets/setup_success_home.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20.h),
-        child: Container(
-          color: AppColors.lightGrey,
-          child: GridView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10.w,
-                mainAxisSpacing: 15.h,
-                childAspectRatio: 0.7),
-            itemBuilder: (context, index) {
-              return const CardOfProduct();
-            },
-            itemCount: 20,
-          ),
-        ),
-      ),
-    ));
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        switch (state) {
+          case HomeDataLoadingState _:
+            return const SetupLoadingHome();
+          case HomeDataSuccessState _:
+            return SetupSuccessHome(
+              homeResponseModel: state.homeResponseModel,
+            );
+          case HomeDataErrorState _:
+            return const SizedBox();
+          default:
+            return const SizedBox();
+        }
+      },
+    );
   }
 }

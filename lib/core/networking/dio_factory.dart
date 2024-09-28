@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shop_app/core/helpers/cache_helper.dart';
 
 class DioFactory {
   DioFactory._();
@@ -26,6 +27,15 @@ class DioFactory {
     dio?.options.headers = {
       'lang': ' en',
       'Content-Type': 'application/json',
+      'Authorization': CacheHelper.getData(key: 'token'),
+    };
+  }
+
+  static void setTokenIntoHeaderAfterLogin(String token) {
+    dio?.options.headers = {
+      'lang': ' en',
+      'Content-Type': 'application/json',
+      'Authorization': token,
     };
   }
 
