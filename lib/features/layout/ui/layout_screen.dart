@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/core/di/dependency_injection.dart';
 import 'package:shop_app/features/cart/logic/cart_cubit.dart';
 import 'package:shop_app/features/cart/ui/cart_screen.dart';
 import 'package:shop_app/features/favourites/logic/favourite_cubit.dart';
@@ -23,7 +24,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
     switch (index) {
       case 0:
         return BlocProvider(
-          create: (context) => HomeCubit(),
+          create: (context) => getIt<HomeCubit>()..getHomeData(),
           child: const HomeScreen(),
         );
       case 1:

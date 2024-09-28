@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/core/constants/app_constants.dart';
 import 'package:shop_app/core/helpers/cache_helper.dart';
 import 'package:shop_app/core/networking/api_results.dart';
+import 'package:shop_app/core/networking/dio_factory.dart';
 import 'package:shop_app/features/login/data/models/login_request_body.dart';
 import 'package:shop_app/features/login/data/models/login_response_body.dart';
 import 'package:shop_app/features/login/data/repos/login_repo.dart';
@@ -26,6 +27,7 @@ class LoginCubit extends Cubit<LoginState> {
     if (response is Success<LoginResponseBody>) {
       token = response.data.data!.token.toString();
       CacheHelper.setData(key: 'token', value: token);
+      DioFactory.setTokenIntoHeaderAfterLogin(token);
       emit(LoginSuccessState(response.data));
     } else if (response is Failure) {
       response as Failure<LoginResponseBody>;
