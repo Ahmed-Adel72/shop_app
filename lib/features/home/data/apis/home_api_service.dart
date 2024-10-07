@@ -5,6 +5,8 @@ import 'package:shop_app/core/networking/api_base_url.dart';
 import 'package:shop_app/features/home/data/apis/home_api_constants.dart';
 import 'package:shop_app/features/home/data/models/add_favourite_request_body.dart';
 import 'package:shop_app/features/home/data/models/add_favourite_response_body.dart';
+import 'package:shop_app/features/home/data/models/add_to_cart_request_body.dart';
+import 'package:shop_app/features/home/data/models/add_to_cart_respnse_body.dart';
 import 'package:shop_app/features/home/data/models/home_response_model.dart';
 
 part 'home_api_service.g.dart';
@@ -24,5 +26,15 @@ abstract class AddAndRemoveFavorite {
   @POST(HomeApiConstants.addFavouritePoint)
   Future<AddFavoriteResponseBody> addAndRemoveFavorite(
     @Body() AddFavouriteRequestBody addFavoriteRequestBody,
+  );
+}
+
+@RestApi(baseUrl: ApiBaseUrl.baseUrl)
+abstract class AddAndRemoveCart {
+  factory AddAndRemoveCart(Dio dio) = _AddAndRemoveCart;
+
+  @POST(HomeApiConstants.addCartPoint)
+  Future<AddToCartResponseBody> addAndRemoveCart(
+    @Body() AddToCartRequestBody addToCartRequestBody,
   );
 }
