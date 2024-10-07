@@ -31,6 +31,8 @@ Future<void> setUpGetIt() async {
   getIt.registerLazySingleton<HomeApiService>(() => HomeApiService(dio));
   getIt.registerLazySingleton<AddAndRemoveFavorite>(
       () => AddAndRemoveFavorite(dio));
-  getIt.registerLazySingleton<HomeRepo>(() => HomeRepo(getIt(), getIt()));
+  getIt.registerLazySingleton<AddAndRemoveCart>(() => AddAndRemoveCart(dio));
+  getIt.registerLazySingleton<HomeRepo>(
+      () => HomeRepo(getIt(), getIt(), getIt()));
   getIt.registerFactory<HomeCubit>(() => HomeCubit(getIt()));
 }

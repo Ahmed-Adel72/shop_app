@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop_app/core/networking/api_results.dart';
 import 'package:shop_app/core/theming/app_colors.dart';
+import 'package:shop_app/features/cart/constants/cart_constants.dart';
 import 'package:shop_app/features/favourites/constants/favourites_constants.dart';
 import 'package:shop_app/features/home/data/models/add_favourite_response_body.dart';
+import 'package:shop_app/features/home/data/models/add_to_cart_respnse_body.dart';
 import 'package:shop_app/features/home/data/models/home_response_model.dart';
 import 'package:shop_app/features/home/logic/home_cubit.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -36,6 +38,28 @@ class _CardOfProductState extends State<CardOfProduct> {
         SnackBar(
           content: Text(
               "Failed to update favorite: ${response.apiErrorModel.message}"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void toggleCart(int productId) async {
+    setState(() {
+      cart[productId] = !cart[productId]!; // Toggle favorite state
+    });
+    final response = await context.read<HomeCubit>().addOrRemoveCart(
+          productId: productId,
+        );
+    if (response is Success<AddToCartResponseBody>) {
+    } else if (response is Failure<AddToCartResponseBody>) {
+      setState(() {
+        cart[productId] = !cart[productId]!;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text("Failed to update cart: ${response.apiErrorModel.message}"),
           backgroundColor: Colors.red,
         ),
       );
@@ -164,10 +188,17 @@ class _CardOfProductState extends State<CardOfProduct> {
                       },
                     ),
                     IconButton(
-                      icon: const Icon(
-                        Icons.add_shopping_cart,
-                      ),
-                      onPressed: () {},
+                      icon: cart[model.id]!
+                          ? const Icon(
+                              Icons.shopping_cart,
+                              color: AppColors.primaryColor,
+                            )
+                          : const Icon(
+                              Icons.add_shopping_cart,
+                            ),
+                      onPressed: () {
+                        toggleCart(model.id!);
+                      },
                     ),
                   ],
                 ),
