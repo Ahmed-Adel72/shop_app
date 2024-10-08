@@ -7,6 +7,7 @@ import 'package:shop_app/features/home/data/models/add_favourite_request_body.da
 import 'package:shop_app/features/home/data/models/add_favourite_response_body.dart';
 import 'package:shop_app/features/home/data/models/add_to_cart_request_body.dart';
 import 'package:shop_app/features/home/data/models/add_to_cart_respnse_body.dart';
+import 'package:shop_app/features/home/data/models/categories_response_body.dart';
 import 'package:shop_app/features/home/data/models/home_response_model.dart';
 
 part 'home_api_service.g.dart';
@@ -37,4 +38,12 @@ abstract class AddAndRemoveCart {
   Future<AddToCartResponseBody> addAndRemoveCart(
     @Body() AddToCartRequestBody addToCartRequestBody,
   );
+}
+
+@RestApi(baseUrl: ApiBaseUrl.baseUrl)
+abstract class GetCategories {
+  factory GetCategories(Dio dio) = _GetCategories;
+
+  @GET(HomeApiConstants.getCategories)
+  Future<CategoriesResponseBody> getCategories();
 }

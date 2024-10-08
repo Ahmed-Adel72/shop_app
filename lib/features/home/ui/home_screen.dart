@@ -12,17 +12,17 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        switch (state) {
-          case HomeDataLoadingState _:
-            return const SetupLoadingHome();
-          case HomeDataSuccessState _:
-            return SetupSuccessHome(
-              homeResponseModel: state.homeResponseModel,
-            );
-          case HomeDataErrorState _:
-            return const SizedBox();
-          default:
-            return const SizedBox();
+        if (state is HomeDataLoadingState) {
+          return const SetupLoadingHome();
+        } else if (state is HomeAndCategoriesSuccessState) {
+          return SetupSuccessHome(
+            homeResponseModel: state.homeResponseModel,
+            categoriesResponseBody: state.categoriesResponseBody,
+          );
+        } else if (state is HomeDataErrorState) {
+          return Center(child: Text("Error: ${state.apiErrorModel.message}"));
+        } else {
+          return const SizedBox(); // Handle the initial state or any other case
         }
       },
     );

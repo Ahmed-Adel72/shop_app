@@ -24,7 +24,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
     switch (index) {
       case 0:
         return BlocProvider(
-          create: (context) => getIt<HomeCubit>()..getHomeData(),
+          create: (context) => getIt<HomeCubit>()..getHomeAndCategoriesData(),
           child: const HomeScreen(),
         );
       case 1:
