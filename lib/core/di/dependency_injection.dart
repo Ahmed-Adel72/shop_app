@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shop_app/core/networking/dio_factory.dart';
+import 'package:shop_app/features/categories/data/apis/categories_api_service.dart';
+import 'package:shop_app/features/categories/data/repos/categories_detail_repo.dart';
+import 'package:shop_app/features/categories/logic/categories_cubit.dart';
 import 'package:shop_app/features/home/data/apis/home_api_service.dart';
 import 'package:shop_app/features/home/data/repos/home_repo.dart';
 import 'package:shop_app/features/home/logic/home_cubit.dart';
@@ -36,4 +39,12 @@ Future<void> setUpGetIt() async {
   getIt.registerLazySingleton<HomeRepo>(
       () => HomeRepo(getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<HomeCubit>(() => HomeCubit(getIt()));
+
+  // category details
+  getIt.registerLazySingleton<CategoriesApiService>(
+      () => CategoriesApiService(dio));
+  getIt.registerLazySingleton<CategoriesDetailRepo>(
+      () => CategoriesDetailRepo(getIt()));
+  getIt.registerFactory<CategoriesCubit>(
+      () => CategoriesCubit(getIt(), getIt()));
 }
