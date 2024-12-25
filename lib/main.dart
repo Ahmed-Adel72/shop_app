@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shop_app/core/constants/app_constants.dart';
 import 'package:shop_app/core/di/dependency_injection.dart';
 import 'package:shop_app/core/routing/app_router.dart';
 import 'package:shop_app/core/routing/routes.dart';
+import 'package:shop_app/features/cart/data/apis/api_keys_stripe.dart';
 import 'package:shop_app/shop_app.dart';
 import 'core/helpers/bloc_observer.dart';
 import 'core/helpers/cache_helper.dart';
@@ -13,6 +15,7 @@ late String initialRoute;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = ApiKeysStripe.publishableKey;
   await ScreenUtil.ensureScreenSize();
   await CacheHelper.init();
 

@@ -86,6 +86,7 @@ class _CardOfProductState extends State<CardOfProduct> {
                 child: CachedNetworkImage(
                   imageUrl: "${model.image}",
                   progressIndicatorBuilder: (context, url, downloadProgress) {
+                    // Show Skeleton while image is loading
                     return Skeletonizer(
                       enabled: true,
                       child: Container(
@@ -109,6 +110,29 @@ class _CardOfProductState extends State<CardOfProduct> {
                       ),
                     ),
                   ),
+                  errorWidget: (context, url, error) => Container(
+                    width: 150.w,
+                    height: 150.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(12.0.r),
+                      color: AppColors.lightGrey, // Keeps the design consistent
+                    ),
+                    child: Icon(
+                      Icons.error, // Display error icon
+                      color: Colors.red,
+                      size: 40.w, // Adjust size to fit the design
+                    ),
+                  ),
+                  placeholderFadeInDuration: const Duration(
+                      milliseconds: 500), // Smooth transition for the image
+                  fadeInDuration: const Duration(
+                      milliseconds: 500), // Optional: Smooth image fade-in
+                  maxHeightDiskCache:
+                      300, // Limit cache size to optimize memory usage
+                  maxWidthDiskCache: 300,
+                  useOldImageOnUrlChange:
+                      true, // Use old image if the URL changes
                 ),
               ),
               model.discount != 0

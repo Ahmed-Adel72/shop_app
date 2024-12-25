@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/core/di/dependency_injection.dart';
+import 'package:shop_app/features/cart/ui/thanks_screen.dart';
 import 'package:shop_app/features/categories/logic/categories_cubit.dart';
 import 'package:shop_app/features/categories/ui/categories_details.dart';
 import 'package:shop_app/features/layout/ui/layout_screen.dart';
@@ -42,6 +43,10 @@ class AppRouter {
               id: id,
             ),
           ),
+        );
+      case Routes.thanksScreen:
+        return MaterialPageRoute(
+          builder: (_) => const ThanksScreen(),
         );
 
       default:
