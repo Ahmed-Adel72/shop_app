@@ -1,6 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shop_app/core/networking/dio_factory.dart';
+import 'package:shop_app/features/cart/data/apis/api_service_stripe.dart';
+import 'package:shop_app/features/cart/data/apis/stripe_service.dart';
+import 'package:shop_app/features/cart/data/repos/checkout_repo.dart';
+import 'package:shop_app/features/cart/data/repos/checkout_repo_impl.dart';
+import 'package:shop_app/features/cart/logic/cart_cubit.dart';
 import 'package:shop_app/features/categories/data/apis/categories_api_service.dart';
 import 'package:shop_app/features/categories/data/repos/categories_detail_repo.dart';
 import 'package:shop_app/features/categories/logic/categories_cubit.dart';
@@ -47,4 +52,11 @@ Future<void> setUpGetIt() async {
       () => CategoriesDetailRepo(getIt()));
   getIt.registerFactory<CategoriesCubit>(
       () => CategoriesCubit(getIt(), getIt()));
+
+  getIt.registerLazySingleton<ApiServiceStripe>(() => ApiServiceStripe(Dio()));
+  getIt.registerLazySingleton<StripeService>(() => StripeService(getIt()));
+  getIt
+      .registerLazySingleton<CheckoutRepoImpl>(() => CheckoutRepoImpl(getIt()));
+  getIt.registerLazySingleton<CheckoutRepo>(() => CheckoutRepoImpl(getIt()));
+  getIt.registerFactory<CartCubit>(() => CartCubit(getIt()));
 }

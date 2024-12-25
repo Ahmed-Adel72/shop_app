@@ -21,10 +21,10 @@ class HomeCubit extends Cubit<HomeState> {
     final response = await _homeRepo.getHomeDate();
     if (response is Success<HomeResponseModel>) {
       emit(HomeDataSuccessState(response.data));
-      response.data.data!.products!.forEach((element) {
+      for (var element in response.data.data!.products!) {
         favorites.addAll({element.id: element.inFavorites});
         cart.addAll({element.id: element.inCart});
-      });
+      }
     } else if (response is Failure<HomeResponseModel>) {
       emit(HomeDataErrorState(response.apiErrorModel));
     }
@@ -69,10 +69,10 @@ class HomeCubit extends Cubit<HomeState> {
 
     if (homeResponse is Success<HomeResponseModel> &&
         categoriesResponse is Success<CategoriesResponseBody>) {
-      homeResponse.data.data!.products!.forEach((element) {
+      for (var element in homeResponse.data.data!.products!) {
         favorites.addAll({element.id: element.inFavorites});
         cart.addAll({element.id: element.inCart});
-      });
+      }
       emit(HomeAndCategoriesSuccessState(
           homeResponse.data, categoriesResponse.data));
     } else {

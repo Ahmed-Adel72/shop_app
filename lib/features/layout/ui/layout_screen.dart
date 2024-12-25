@@ -34,7 +34,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         );
       case 2:
         return BlocProvider(
-          create: (context) => CartCubit(),
+          create: (context) => getIt<CartCubit>(),
           child: const CartScreen(),
         );
       case 3:
