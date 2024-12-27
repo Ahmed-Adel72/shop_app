@@ -4,6 +4,8 @@ import 'package:shop_app/core/di/dependency_injection.dart';
 import 'package:shop_app/features/cart/ui/thanks_screen.dart';
 import 'package:shop_app/features/categories/logic/categories_cubit.dart';
 import 'package:shop_app/features/categories/ui/categories_details.dart';
+import 'package:shop_app/features/favourites/logic/favourite_cubit.dart';
+import 'package:shop_app/features/favourites/ui/favourite_screen.dart';
 import 'package:shop_app/features/layout/ui/layout_screen.dart';
 import 'package:shop_app/features/login/logic/login_cubit.dart';
 import 'package:shop_app/features/login/ui/login_screen.dart';
@@ -27,6 +29,13 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<SignUpCubit>(),
             child: const SignUpScreen(),
+          ),
+        );
+      case Routes.favoriteScreen:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<FavouriteCubit>(),
+            child: const FavouriteScreen(),
           ),
         );
       case Routes.layoutScreen:

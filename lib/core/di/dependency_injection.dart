@@ -9,6 +9,9 @@ import 'package:shop_app/features/cart/logic/cart_cubit.dart';
 import 'package:shop_app/features/categories/data/apis/categories_api_service.dart';
 import 'package:shop_app/features/categories/data/repos/categories_detail_repo.dart';
 import 'package:shop_app/features/categories/logic/categories_cubit.dart';
+import 'package:shop_app/features/favourites/data/apis/favorites_api_service.dart';
+import 'package:shop_app/features/favourites/data/repos/favorites_repo.dart';
+import 'package:shop_app/features/favourites/logic/favourite_cubit.dart';
 import 'package:shop_app/features/home/data/apis/home_api_service.dart';
 import 'package:shop_app/features/home/data/repos/home_repo.dart';
 import 'package:shop_app/features/home/logic/home_cubit.dart';
@@ -59,4 +62,12 @@ Future<void> setUpGetIt() async {
       .registerLazySingleton<CheckoutRepoImpl>(() => CheckoutRepoImpl(getIt()));
   getIt.registerLazySingleton<CheckoutRepo>(() => CheckoutRepoImpl(getIt()));
   getIt.registerFactory<CartCubit>(() => CartCubit(getIt()));
+
+  // favorites
+  getIt.registerLazySingleton<FavoritesApiService>(
+      () => FavoritesApiService(dio));
+  getIt.registerLazySingleton<DeleteFavorite>(() => DeleteFavorite(dio));
+  getIt.registerLazySingleton<FavoritesRepo>(
+      () => FavoritesRepo(getIt(), getIt()));
+  getIt.registerFactory<FavouriteCubit>(() => FavouriteCubit(getIt()));
 }

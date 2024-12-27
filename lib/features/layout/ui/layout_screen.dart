@@ -29,7 +29,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         );
       case 1:
         return BlocProvider(
-          create: (context) => FavouriteCubit(),
+          create: (context) => getIt<FavouriteCubit>()..getFavorites(),
           child: const FavouriteScreen(),
         );
       case 2:
