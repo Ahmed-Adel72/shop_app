@@ -16,6 +16,7 @@ class FavouriteScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: RefreshIndicator(
+          color: AppColors.primaryColor,
           onRefresh: () async {
             context.read<FavouriteCubit>().getFavorites();
           },

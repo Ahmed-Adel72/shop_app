@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shop_app/core/networking/dio_factory.dart';
 import 'package:shop_app/features/cart/data/apis/api_service_stripe.dart';
+import 'package:shop_app/features/cart/data/apis/cart_api_service.dart';
 import 'package:shop_app/features/cart/data/apis/stripe_service.dart';
+import 'package:shop_app/features/cart/data/repos/cart_repo.dart';
 import 'package:shop_app/features/cart/data/repos/checkout_repo.dart';
 import 'package:shop_app/features/cart/data/repos/checkout_repo_impl.dart';
 import 'package:shop_app/features/cart/logic/cart_cubit.dart';
@@ -61,7 +63,11 @@ Future<void> setUpGetIt() async {
   getIt
       .registerLazySingleton<CheckoutRepoImpl>(() => CheckoutRepoImpl(getIt()));
   getIt.registerLazySingleton<CheckoutRepo>(() => CheckoutRepoImpl(getIt()));
-  getIt.registerFactory<CartCubit>(() => CartCubit(getIt()));
+  // carts
+  getIt.registerLazySingleton<CartApiService>(() => CartApiService(dio));
+  getIt.registerLazySingleton<DeleteCart>(() => DeleteCart(dio));
+  getIt.registerLazySingleton<CartRepo>(() => CartRepo(getIt(), getIt()));
+  getIt.registerFactory<CartCubit>(() => CartCubit(getIt(), getIt()));
 
   // favorites
   getIt.registerLazySingleton<FavoritesApiService>(

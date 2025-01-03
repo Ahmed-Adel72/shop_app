@@ -19,56 +19,89 @@ class LayoutScreen extends StatefulWidget {
 
 class _LayoutScreenState extends State<LayoutScreen> {
   int _selectedIndex = 0;
+  late HomeCubit _homeCubit;
+  late FavouriteCubit _favouriteCubit;
+  late CartCubit _cartCubit;
+  late SettingsCubit _settingsCubit;
 
-  Widget _getScreen(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _initCubits();
+  }
+
+  void _initCubits() {
+    _homeCubit = getIt<HomeCubit>()..getHomeAndCategoriesData();
+    _favouriteCubit = getIt<FavouriteCubit>()..getFavorites();
+    _cartCubit = getIt<CartCubit>()..getCarts();
+    _settingsCubit = SettingsCubit();
+  }
+
+  void _refreshData(int index) {
     switch (index) {
       case 0:
-        return BlocProvider(
-          create: (context) => getIt<HomeCubit>()..getHomeAndCategoriesData(),
-          child: const HomeScreen(),
-        );
+        _homeCubit.getHomeAndCategoriesData();
+        break;
       case 1:
-        return BlocProvider(
-          create: (context) => getIt<FavouriteCubit>()..getFavorites(),
-          child: const FavouriteScreen(),
-        );
+        _favouriteCubit.getFavorites();
+        break;
       case 2:
-        return BlocProvider(
-          create: (context) => getIt<CartCubit>(),
-          child: const CartScreen(),
-        );
+        _cartCubit.getCarts();
+        break;
       case 3:
-        return BlocProvider(
-          create: (context) => SettingsCubit(),
-          child: const SettingsScreen(),
-        );
-      default:
-        return const HomeScreen(); // Fallback to HomeScreen
+        // Refresh settings if needed
+        break;
     }
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _refreshData(index);
     });
   }
 
   @override
+  void dispose() {
+    _homeCubit.close();
+    _favouriteCubit.close();
+    _cartCubit.close();
+    _settingsCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _getScreen(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: "Favourite"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Cart"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeCubit>.value(value: _homeCubit),
+        BlocProvider<FavouriteCubit>.value(value: _favouriteCubit),
+        BlocProvider<CartCubit>.value(value: _cartCubit),
+        BlocProvider<SettingsCubit>.value(value: _settingsCubit),
+      ],
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: const [
+            HomeScreen(),
+            FavouriteScreen(),
+            CartScreen(),
+            SettingsScreen(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.favorite), label: "Favourite"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart), label: "Cart"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: "Settings"),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
