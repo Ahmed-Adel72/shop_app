@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop_app/core/helpers/extensions.dart';
 import 'package:shop_app/core/routing/routes.dart';
 import 'package:shop_app/core/theming/app_colors.dart';
-import 'package:shop_app/core/widgets/app_text_button.dart';
-import 'package:shop_app/features/cart/data/apis/api_keys_stripe.dart';
-import 'package:shop_app/features/cart/data/models/payment_intent_reqest_model.dart';
 import 'package:shop_app/features/cart/logic/cart_cubit.dart';
 import 'package:shop_app/features/cart/logic/cart_state.dart';
+import 'package:shop_app/features/cart/ui/widgets/my_cart_details.dart';
+import 'package:shop_app/features/cart/ui/widgets/setup_cart_empty.dart';
+import 'package:shop_app/features/cart/ui/widgets/setup_error_cart.dart';
+import 'package:shop_app/features/cart/ui/widgets/setup_loading_cart.dart';
+import 'package:shop_app/features/cart/ui/widgets/setup_loading_processing_payment.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -17,50 +18,79 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CartCubit, CartState>(
       listener: (context, state) {
-        if (state is PaymentSuccessState) {
-          context.pushNamed(Routes.thanksScreen);
-        }
-        if (state is PaymentErrorState) {
-          SnackBar snackBar = SnackBar(content: Text(state.error));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        switch (state) {
+          case PaymentLoadingState():
+            showLoadingDialog(context);
+            break;
+
+          case PaymentSuccessState():
+            // Dismiss loading dialog if showing
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+            context.pushNamed(Routes.thanksScreen);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Payment completed successfully'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
+            break;
+
+          case PaymentErrorState():
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            break;
+
+          case CartsErrorState():
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error ?? 'An error occurred'),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            break;
+
+          default:
+            break;
         }
       },
       builder: (context, state) {
-        return Scaffold(
-            body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              state is PaymentLoadingState
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryColor,
-                      ),
-                    )
-                  : SizedBox(
-                      height: 54.h,
-                      child: AppTextButton(
-                        buttonText: "Checkout",
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(color: AppColors.white),
-                        onPressed: () {
-                          PaymentIntentReqestModel paymentIntentReqestModel =
-                              PaymentIntentReqestModel(
-                                  amount: "100",
-                                  currency: "USD",
-                                  customerId: ApiKeysStripe.customerId);
-                          context.read<CartCubit>().makePayment(
-                              paymentIntentReqestModel:
-                                  paymentIntentReqestModel);
-                        },
-                      ),
+        return SafeArea(
+          child: Scaffold(
+            body: RefreshIndicator(
+              color: AppColors.primaryColor,
+              onRefresh: () async {
+                await context.read<CartCubit>().getCarts();
+              },
+              child: BlocBuilder<CartCubit, CartState>(
+                builder: (context, state) => switch (state) {
+                  CartsLoadingState() => const SetupLoadingCart(),
+                  CartsSuccessState()
+                      when state.cartResponse.data!.cartItems.isEmpty =>
+                    const SetupCartEmpty(),
+                  CartsSuccessState() => MyCartDetails(
+                      cartResponseBody: state.cartResponse,
                     ),
-            ],
+                  CartsErrorState() => SetupErrorCart(
+                      error: state.error ?? 'Unknown error occurred',
+                    ),
+                  _ => const SizedBox(),
+                },
+              ),
+            ),
           ),
-        ));
+        );
       },
     );
   }
